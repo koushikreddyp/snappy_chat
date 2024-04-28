@@ -1,0 +1,55 @@
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Robot from "../assets/robot.gif";
+import Logout from "./Logout";
+export default function Welcome() {
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    async function fetchUserName() {
+      try {
+        const userData = await JSON.parse(
+          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+        );
+        if (userData && userData.username) {
+          setUserName(userData.username);
+        }
+      } catch (error) {
+        console.error("Error fetching username:", error);
+      }
+    }
+
+    fetchUserName();
+  }, []);
+  return (
+    <Container>
+      <TopRightCorner>
+        <Logout />
+      </TopRightCorner>
+      <img src={Robot} alt="" />
+      <h1>
+        Welcome, <span>{userName}!</span>
+      </h1>
+      <h3>Please select a chat to Start messaging.</h3>
+    </Container>
+  );
+}
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  flex-direction: column;
+  img {
+    height: 20rem;
+  }
+  span {
+    color: #4e0eff;
+  }
+`;
+
+const TopRightCorner = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`
